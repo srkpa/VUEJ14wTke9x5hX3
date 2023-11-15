@@ -10,11 +10,12 @@ from sklearn.metrics import get_scorer
 from sklearn.utils import all_estimators
 from sklearn.base import MetaEstimatorMixin
 from sklearn.ensemble._forest import BaseForest
+from sklearn.ensemble._weight_boosting import BaseWeightBoosting
 
 
 def is_meta_estimator(estimator_class: Type[BaseEstimator]) -> bool:
     return issubclass(estimator_class, MetaEstimatorMixin) and not issubclass(
-        estimator_class, BaseForest
+        estimator_class, (BaseForest, BaseWeightBoosting)
     )
 
 
@@ -28,7 +29,7 @@ def get_model(
             for _, model_class in sk_estimators.items()
             if not is_meta_estimator(model_class)
         ]
-        if task is not None
+        if model_name is None
         else [sk_estimators[model_name](**kwargs)]
     )
 
